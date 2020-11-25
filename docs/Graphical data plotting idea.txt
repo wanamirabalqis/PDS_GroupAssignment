@@ -1,0 +1,10 @@
+Graphical data plotting idea
+1)	Top 10 – Product/Product category Sales
+2)	Show trend graph for all the years
+3)	Top 10 – Region category Sales
+4)	Top 10 Product/Product category Discount
+5)	Show Trend graph for number of order/delivery
+6)	Plot Chart the price/sales based on product/product Category
+7)	Plot Sales data based on season/quarter?
+8)	Plot number of order based on total order range
+9)	Show sales trend for different customer group
