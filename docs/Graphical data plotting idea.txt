@@ -1,6 +1,6 @@
 Graphical data plotting idea
 1)	Top 10 – Product/Product category Sales - Kang
-2)	Show trend graph for all the years
+2)	Show trend graph for all the years - Kang
 3)	Top 10 – Region category Sales
 4)	Top 10 Product/Product category Discount
 5)	Show Trend graph for number of order/delivery
