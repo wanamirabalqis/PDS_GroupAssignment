@@ -1,7 +1,8 @@
 Graphical data plotting idea
 1)	Top 10 – Product/Product category Sales - Kang
-2)	Show trend graph for all the years - Kang
-3)	Top 10 – Region category Sales
+2)	Show trend graph for all the years (by month)- Kang
+    Note: tested with month but the graph is too busy
+3)	Top 10 – Region category Sales - Kang
 4)	Top 10 Product/Product category Discount
 5)	Show Trend graph for number of order/delivery
 6)	Plot Chart the price/sales based on product/product Category
