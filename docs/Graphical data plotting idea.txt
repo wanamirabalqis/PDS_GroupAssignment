@@ -1,11 +1,14 @@
 Graphical data plotting idea
-1)	Top 10 – Product/Product category Sales - Kang
-2)	Show trend graph for all the years (by month)- Kang
+1)	Top 10 – Product/Product category Sales - Kang (Done but not for top 10 yet)
+2)	Show trend graph for all the years (by month)- Kang (Done)
     Note: tested with month but the graph is too busy
-3)	Top 10 – Region category Sales - Kang
+3)	Top 10 – Region category Sales - Kang (Done but not for top 10)
+    Note: Only have 3 category: Maybe use sub category? 
 4)	Top 10 Product/Product category Discount
-5)	Show Trend graph for number of order/delivery
-6)	Plot Chart the price/sales based on product/product Category
-7)	Plot Sales data based on season/quarter?
-8)	Plot number of order based on total order range
-9)	Show sales trend for different customer group
+5)	Show Trend graph for number of order/delivery - Kang (Done)
+6)	Plot Chart the price/sales based on product/product Category (Done - created trend graphc for product)
+7)	Plot Sales data based on season/quarter? Done (Can be extracted from monthly view)
+8)	Plot number of order vs total delivery day (total days between delivery date and order date)
+9)	Show sales trend for different customer group - Kang (Done)
+
+OPEN FOR SUGGESTION!
