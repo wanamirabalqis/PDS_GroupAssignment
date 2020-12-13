@@ -80,6 +80,56 @@ top10Product <- top10Product %>%
   top_n(10)
 
 ggplot(data=top10Product, aes(x=Product.ID, y=totalSales, fill=Product.ID)) +
+  geom_bar(colour="black", stat="identity")
+#  guides(fill=FALSE)
+
+#===============================================================================
+# Analysis Bottom 10 - Sales Product
+#===============================================================================
+bot10Product <- superStoreData %>%                     # Specify data frame
+  group_by(Product.ID) %>%                   # Specify group indicator
+  summarise_at(vars(Sales),              # Specify column
+               list(totalSales = sum)) 
+
+bot10Product <- bot10Product %>% 
+  arrange(desc(totalSales)) %>%
+  top_n(-10)
+
+ggplot(data=bot10Product, aes(x=Product.ID, y=totalSales, fill=Product.ID)) +
+  geom_bar(colour="black", stat="identity")
+#  guides(fill=FALSE)
+
+#===============================================================================
+# Analysis Top 10 - Sub Category - 20201213
+# Because category only have 3 data, dont' need to do top 10
+#===============================================================================
+top10SubCat <- superStoreData %>%                     # Specify data frame
+  group_by(Sub.Category) %>%                   # Specify group indicator
+  summarise_at(vars(Sales),              # Specify column
+               list(totalSales = sum)) 
+
+top10SubCat <- top10SubCat %>% 
+  arrange(desc(totalSales)) %>%
+  top_n(10)
+
+ggplot(data=top10SubCat, aes(x=Sub.Category, y=totalSales, fill=Sub.Category)) +
+  geom_bar(colour="black", stat="identity") +
+  guides(fill=FALSE)
+
+#===============================================================================
+# Analysis Bottom 10 - Sub Category - 20201213
+# Because category only have 3 data, dont' need to do top 10
+#===============================================================================
+bot10SubCat <- superStoreData %>%                     # Specify data frame
+  group_by(Sub.Category) %>%                   # Specify group indicator
+  summarise_at(vars(Sales),              # Specify column
+               list(totalSales = sum)) 
+
+bot10SubCat <- bot10SubCat %>% 
+  arrange(desc(totalSales)) %>%
+  top_n(-10)
+
+ggplot(data=bot10SubCat, aes(x=Sub.Category, y=totalSales, fill=Sub.Category)) +
   geom_bar(colour="black", stat="identity") +
   guides(fill=FALSE)
 
@@ -97,19 +147,21 @@ totalSalesYear %>%
   geom_line()
 
 #===============================================================================
-# Top 5 Region category sales
+# Region category sales
 #===============================================================================
 # can try to filter by year
-top5RegionSales <- superStoreData %>%                     # Specify data frame
+RegionSales <- superStoreData %>%                     # Specify data frame
   group_by(Region,Category) %>%                   # Specify group indicator
   summarise_at(vars(Sales),              # Specify column
                list(totalSales = sum))
 
-ggplot(top5RegionSales, aes(x = Region, y = totalSales))+
-  geom_col(aes(fill = Category), width = 0.7)
+#ggplot(top5RegionSales, aes(x = Region, y = totalSales))+
+#  geom_col(aes(fill = Category), width = 0.7)
 
+ggplot(RegionSales, aes(Region,totalSales, fill=Category))+
+  geom_bar(stat = "identity", position = 'dodge')
 #===============================================================================
-# Region category profit
+# Region category profit  - 20201213
 #===============================================================================
 
 # can try to filter by year
@@ -118,8 +170,12 @@ regionCatProfit <- superStoreData %>%                     # Specify data frame
   summarise_at(vars(Profit),              # Specify column
                list(totalProfit = sum))
 
-ggplot(regionCatProfit, aes(x = Region, y = totalProfit))+
-  geom_col(aes(fill = Category), width = 0.7)
+ggplot(regionCatProfit, aes(x = Region, y = totalProfit, fill=Category))+
+#  geom_col(aes(fill = Category), width = 0.7)
+  geom_bar(stat = "identity", position = 'dodge')
+
+#ggplot(RegionSales, aes(Region,totalSales, fill=Category))+
+#  geom_bar(stat = "identity", position = 'dodge')
 
 #===============================================================================
 # Trend analysis for order ID per month
@@ -147,18 +203,19 @@ productCatSales %>%
   geom_line()
 
 #===============================================================================
-# Chart about number of delivery per duration (delivery date - Order)
+# Chart about number of delivery per duration (delivery date - Order) - 20201213
 #===============================================================================
 # can try to filter by year
 deliveryPerDuration <- superStoreData %>%                     # Specify data frame
   group_by(Region,shipDays) %>%                   # Specify group indicator
   summarise(uniqueOrderId = n_distinct(Order.ID))
 
-ggplot(deliveryPerDuration, aes(x = Region, y = uniqueOrderId))+
-  geom_col(aes(fill = shipDays), width = 0.7)
+ggplot(deliveryPerDuration, aes(x = Region, y = uniqueOrderId, fill = shipDays))+
+#  geom_col(aes(fill = shipDays), width = 0.7)
+  geom_bar(stat = "identity", position = 'dodge')
 
 #===============================================================================
-# Sales per customer group
+# Sales per customer group - 20201213
 #===============================================================================
 # can try to filter by year
 totalSalesCustGroup <- superStoreData %>%                     # Specify data frame
@@ -167,5 +224,19 @@ totalSalesCustGroup <- superStoreData %>%                     # Specify data fra
                list(totalSales = sum)) 
 
 # Visualization
-ggplot(totalSalesCustGroup, aes(x = Segment, y = totalSales))+
-  geom_col(aes(fill = year), width = 0.7)
+ggplot(totalSalesCustGroup, aes(x = Segment, y = totalSales, fill=year))+
+  #  geom_col(aes(fill = year), width = 0.7)
+  geom_bar(stat = "identity", position = 'dodge')
+
+#===============================================================================
+# Chart about ship mode per customer group - 20201213
+#===============================================================================
+# can try to filter by year
+shipModeCust <- superStoreData %>%                     # Specify data frame
+  group_by(Segment,Ship.Mode) %>%                   # Specify group indicator
+  summarise(uniqueOrderId = n_distinct(Order.ID))
+
+ggplot(shipModeCust, aes(x = Segment, y = uniqueOrderId, fill = Ship.Mode))+
+  #  geom_col(aes(fill = shipDays), width = 0.7)
+  geom_bar(stat = "identity", position = 'dodge')
+ 
