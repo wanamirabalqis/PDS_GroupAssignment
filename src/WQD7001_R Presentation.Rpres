@@ -1,0 +1,36 @@
+
+US Superstore Dashboard Analysis
+========================================================
+author: 
+date: 
+css:custom.css
+autosize: true
+
+WQD7001 - Principle of Data Science <br>
+Team Members: <br>
+1) Wan Amira Balqis binti Wan Amir Abdul Hakim (S2003952) <br>
+2) Kang Hean Kuan (S2005669) <br>
+3) Nicholas Lee Kan (17201982) <br>
+4) Lee Ming Xiang (S2021030) <br>
+
+US Superstore Dashboard
+========================================================
+- A data from Statista stated that the global e-commerce market had sales reaching $3.5 trillion and represented 14% of the total share of global retail sales by the end of 2019. 
+
+<b>Problem Statement</b><br>
+- What are the trend of sales that we can observe for different categories in the past years? <br>
+- What are the trend of shippings that we can observe for different region in the past years? <br>
+- What are the past industry data which could provide an insight on the recent sales? <br>
+
+
+Test Screenshot
+========================================================
+
+![Test Image](anaconda.png)
+
+Slide With Plot
+========================================================
+
+```{r, echo=FALSE}
+plot(cars)
+```
