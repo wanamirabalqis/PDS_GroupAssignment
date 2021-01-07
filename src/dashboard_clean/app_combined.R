@@ -10,6 +10,7 @@ library(forecast)
 library(treemap)
 library(shinydashboard)
 library(stringr)
+require(scales)
 
 #============= For USA map usage start==========
 n <- 4
@@ -47,24 +48,26 @@ superStoreData <- read.csv(url)
 #str(superStoreData)
 
 ## US_Census_Merge_Clean_Data
-#url <- paste("C:/Users/MLee27/Desktop/Training/06-Jupyter_Practice/10_UMS/WQD7001_Principal_Data_Science/Project_Data/data_local/Generated",
-#             "/US_Census_Annual_Merge_Clean_v2.csv", sep = "")
+url <- paste("C:/Users/KANGHEA/OneDrive - Hilti/Study/WQD7001",
+"/Assignment/Group Assignment", 
+"/US_Census_Annual_Merge_Clean_v2.csv", sep = "")
 
-#US_Census_Merge_clean <- read.csv(url)
+US_Census_Merge_clean <- read.csv(url)
 
 #str(US_Census_Merge_clean)
 
 ## Sales Trend Industry Overlook
-#url <- paste("C:/Users/MLee27/Desktop/Training/06-Jupyter_Practice/10_UMS/WQD7001_Principal_Data_Science/Project_Data/data_local/Generated",
-#             "/salesbcll.csv", sep = "")
+url <- paste("C:/Users/KANGHEA/OneDrive - Hilti/Study/WQD7001",
+              "/Assignment/Group Assignment", 
+              "/salesbcll.csv", sep = "")
 
-#salesbcll <- read.csv(url)
+salesbcll <- read.csv(url)
 
 #str(salesbcll)
 
 #============ Total Sales Year Trend Data Start ==================
 totalSalesYear <- superStoreData %>%
-  group_by(Category, month, year) %>%                   
+  group_by(Category, month, year, Region) %>%                   
   summarise_at(vars(Sales),              
                list(totalSales = sum))
 totalSalesYear$month = as.factor(totalSalesYear$month)
@@ -75,7 +78,7 @@ totalSalesYear$year = as.factor(totalSalesYear$year)
 #Prepare data first so that don't need to keep executing the 
 #aggregation
 stateSales <- superStoreData %>%                     
-  group_by(State,Category,year) %>%                   
+  group_by(State,Category,year, Region) %>%                   
   summarise_at(vars(Sales),              
                list(totalSales = sum))
 #============ State Sales Data ENd==================
@@ -245,11 +248,11 @@ frow9 <- fluidRow(
 frow10 <- fluidRow(
   box(
     width=12,
-    title = "Delivery Trend by Month"
+    title = "Delivery Trend by State"
     ,status = "primary"
     ,solidHeader = TRUE 
     ,collapsible = TRUE 
-    ,plotOutput("deliveryMonth")
+    ,highchartOutput("deliveryMap")
   )
   
 )
@@ -290,6 +293,11 @@ overview <- fluidPage(
                                     "2015",
                                     "2016",
                                     "2017")),
+      selectInput("region1", "Region",c("All",
+                                    "Central",
+                                    "East",
+                                    "South",
+                                    "West")),
       ),
     mainPanel( 
       frow1, 
@@ -312,6 +320,11 @@ Product <- fluidPage(
                                     "2015",
                                     "2016",
                                     "2017")),
+      selectInput("region2", "Region",c("All",
+                                        "Central",
+                                        "East",
+                                        "South",
+                                        "West")),
     ),
     mainPanel( 
       #frow4, 
@@ -334,6 +347,11 @@ Delivery <- fluidPage(
                                     "2015",
                                     "2016",
                                     "2017")),
+      selectInput("region4", "Region",c("All",
+                                        "Central",
+                                        "East",
+                                        "South",
+                                        "West")),
     ),
     mainPanel( 
       #frow9, 
@@ -408,7 +426,8 @@ server <- function(input, output, session) {
   tolSalFiltered <- reactive(
     {
       #Second aggragation
-      if (input$cat == "All" & input$year1 == "All"){
+      if (input$cat == "All" & input$year1 == "All" 
+          & input$region1 == "ALL"){
         tolSalYearGrp <- totalSalesYear %>%                     
           group_by(month, year) %>%                   
           summarise_at(vars(totalSales),              
@@ -431,6 +450,11 @@ server <- function(input, output, session) {
           filter(year == input$year1)
       }
       
+      if (input$region1 != "All") {
+        tolSalYearGrp <- tolSalYearGrp %>% 
+          filter(Region == input$region1)
+      }
+      
       tolSalYearGrp <-  tolSalYearGrp %>% 
         group_by(month, year) %>%                   
         summarise_at(vars(totalSales),              
@@ -443,7 +467,8 @@ server <- function(input, output, session) {
   
   regCatSalFiltered <- reactive(
     {
-      if (input$cat == "All" & input$year1 == "All"){
+      if (input$cat == "All" & input$year1 == "All" &
+          input$region1 == "All"){
         
         regCatSalGrp <- regionCatProfit %>%
           group_by(Region,Category) %>%                   
@@ -467,6 +492,11 @@ server <- function(input, output, session) {
           filter(year == input$year1)
       }
       
+      if (input$region1 != "All") {
+        regCatSalGrp <- regCatSalGrp %>%
+          filter(Region == input$region1)
+      }
+      
       regCatSalGrp <- regCatSalGrp %>%
         group_by(Region,Category) %>%                   
         summarise_at(vars(totalSales), 
@@ -478,7 +508,8 @@ server <- function(input, output, session) {
   mapfiltered <- reactive({
     
     #Second aggragation
-    if (input$cat == "All"  & input$year1 == "All"){
+    if (input$cat == "All"  & input$year1 == "All" &
+      input$region1 == "All" ){
       
       mapSales <- stateSales %>%
         group_by(State) %>%                   # Specify group indicator
@@ -500,6 +531,11 @@ server <- function(input, output, session) {
         filter(year == input$year1)
     }
     
+    if (input$region1 != "All") {
+      mapSales <- mapSales %>%
+        filter(Region == input$region1)
+    }
+    
     mapSales <- mapSales %>%
       group_by(State) %>%                   
       summarise_at(vars(totalSales), 
@@ -511,7 +547,8 @@ server <- function(input, output, session) {
   catSalesTrendFil <- reactive(
     {
       #Second aggragation
-      if (input$cat2 == "All" & input$year2 == "All"){
+      if (input$cat2 == "All" & input$year2 == "All" &
+          input$region2 == "All"){
         tolCatSalGrp <- tab2ProductData %>%                     
           group_by(Category, month) %>%                   
           summarise_at(vars(totalSales),              
@@ -532,6 +569,10 @@ server <- function(input, output, session) {
           filter(year == input$year2)
       }
       
+      if (input$region2 != "All") {
+        tolCatSalGrp <- tolCatSalGrp %>% 
+          filter(Region == input$region2)
+      }
       
       tolCatSalGrp <-  tolCatSalGrp %>% 
         group_by(Category,month) %>%                   
@@ -546,7 +587,8 @@ server <- function(input, output, session) {
   topProdFil <- reactive(
     {
       #Second aggragation
-      if (input$cat2 == "All" & input$year2 == "All"){
+      if (input$cat2 == "All" & input$year2 == "All"
+          & input$region2 == "All"){
         topProdGrp <- tab2ProductData %>%                     
           group_by(Product.Name,Category) %>%                   
           summarise_at(vars(totalSales),              
@@ -574,6 +616,11 @@ server <- function(input, output, session) {
         
       }
       
+      if (input$region2 != "All") {
+        topProdGrp <- topProdGrp %>% 
+          filter(Region == input$region2)
+        
+      }
       
       topProdGrp <- topProdGrp %>% 
         group_by(Product.Name,Category) %>%                   
@@ -591,7 +638,8 @@ server <- function(input, output, session) {
   topSubCatFil <- reactive(
     {
       #Second aggragation
-      if (input$cat2 == "All" & input$year2 == "All"){
+      if (input$cat2 == "All" & input$year2 == "All"
+          & input$region2 == "All"){
         topSubCatGrp <- tab2ProductData %>%                     
           group_by(Sub.Category,Category) %>%                   
           summarise_at(vars(totalSales),              
@@ -613,6 +661,11 @@ server <- function(input, output, session) {
       if (input$year2 != "All") {
         topSubCatGrp <- topSubCatGrp %>% 
           filter(year == input$year2)
+      }
+      
+      if (input$region2 != "All") {
+        topSubCatGrp <- topSubCatGrp %>% 
+          filter(Region == input$region2)
       }
       
       topSubCatGrp <- topSubCatGrp %>% 
@@ -705,9 +758,10 @@ server <- function(input, output, session) {
   #============ Delivery tab related code start==============#
   regionDelvShipFil <- reactive({
     #Second aggragation
-    if (input$cat4 == "All" & input$year4 == "All"){
+    if (input$cat4 == "All" & input$year4 == "All"
+        & input$region4 == "All"){
       regDelvDayGrp <- superStoreData %>% 
-        group_by(Region,shipDays) %>%                   
+        group_by(Region,Ship.Mode) %>%                   
         summarise(uniqueOrderId = n_distinct(Order.ID))
       
       return(regDelvDayGrp)
@@ -726,47 +780,55 @@ server <- function(input, output, session) {
         filter(year == input$year4)
     }
     
+    if (input$region4 != "All") {
+      regDelvDayGrp <-  regDelvDayGrp %>% 
+        filter(Region == input$region4)
+    }
+    
     regDelvDayGrp <-  regDelvDayGrp %>% 
-      group_by(Region,shipDays) %>%                   
+      group_by(Region,Ship.Mode) %>%                   
       summarise(uniqueOrderId = n_distinct(Order.ID))
     
     return(regDelvDayGrp)
   })
   
-  monthDelvShipFil <- reactive({
-    if (input$cat4 == "All" & input$year4 == "All"){
-      monDelvDayGrp <- superStoreData %>%  
-        group_by(month,shipDays) %>%                   
+  mapDelvShipFil <- reactive({
+    if (input$cat4 == "All" & input$year4 == "All"
+        & input$region4 == "All"){
+      mapDelv <- superStoreData %>%
+        group_by(State) %>%
         summarise(uniqueOrderId = n_distinct(Order.ID))
       
-      monDelvDayGrp$month = as.factor(monDelvDayGrp$month)
-      return(monDelvDayGrp)
+      return(mapDelv)
     }
     
-    monDelvDayGrp <- superStoreData
+    mapDelv <- superStoreData
     
     if( input$cat4 != "All" ){
-      monDelvDayGrp <- monDelvDayGrp %>%                     
+      mapDelv <-  mapDelv %>%
         filter(Category == input$cat4)
-      
     }
     
     if (input$year4 != "All") {
-      monDelvDayGrp <- monDelvDayGrp %>%                     
+      mapDelv <-  mapDelv %>%
         filter(year == input$year4)
-      
     }
     
-    monDelvDayGrp <- monDelvDayGrp %>%                     
-      group_by(month,shipDays) %>%                   
+    if (input$region4 != "All") {
+      mapDelv <-  mapDelv %>%
+        filter(Region == input$region4)
+    }
+    
+    mapDelv <- mapDelv %>%
+      group_by(State) %>%
       summarise(uniqueOrderId = n_distinct(Order.ID))
-    monDelvDayGrp$month = as.factor(monDelvDayGrp$month)
-    return(monDelvDayGrp)
+    return(mapDelv)
     
   })
   
   subCatDelvShipFil <- reactive({
-    if (input$cat4 == "All" & input$year4 == "All"){
+    if (input$cat4 == "All" & input$year4 == "All"
+        & input$region4 == "All"){
       subCatDelvDayGrp <- superStoreData %>%
         group_by(Ship.Mode,shipDays) %>%
         summarise(uniqueOrderId = n_distinct(Order.ID))
@@ -786,6 +848,11 @@ server <- function(input, output, session) {
         filter(year == input$year4)
     }
     
+    if (input$region4 != "All") {
+      subCatDelvDayGrp <-  subCatDelvDayGrp %>%
+        filter(Region == input$region4)
+    }
+    
     subCatDelvDayGrp <-  subCatDelvDayGrp %>%
       group_by(Ship.Mode,shipDays) %>%
       summarise(uniqueOrderId = n_distinct(Order.ID))
@@ -800,13 +867,17 @@ server <- function(input, output, session) {
   #================= Output UI Start========================
   #=========== Tab 1 related code start ===================#
   output$trendTotalSales <- renderPlot({
-    ggplot(tolSalFiltered(), aes(x = month, y = totalSales)) + 
-      geom_line(aes(color = year,group=year)) 
+    p <- ggplot(tolSalFiltered(), aes(x = month, y = totalSales)) + 
+      geom_line(aes(color = year,group=year))
+    
+    p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
   })
   
   output$totalSalesByPrd <- renderPlot({
-    ggplot(regCatSalFiltered(), aes(x = Region, y = totalSales))+
+    p <- ggplot(regCatSalFiltered(), aes(x = Region, y = totalSales))+
       geom_col(aes(fill = Category), width = 0.7)
+    
+    p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
   })
   
   output$stateMap <- renderHighchart(
@@ -824,18 +895,24 @@ server <- function(input, output, session) {
   #=========== Tab 1 related code end ===================#
   #=========== Tab 2 related code start ===================#
   output$catSalesTrend <- renderPlot({
-    ggplot(catSalesTrendFil(), aes(x = month, y = totalSales)) + 
+    p <- ggplot(catSalesTrendFil(), aes(x = month, y = totalSales)) + 
       geom_line(aes(color = Category,group=Category)) 
+    
+    p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
   })
   
   output$topSalesCat <- renderPlot({
-    ggplot(topSubCatFil(), aes(x = Sub.Category, y = totalSales)) +
+    p <- ggplot(topSubCatFil(), aes(x = Sub.Category, y = totalSales)) +
       geom_col(aes(fill = Category), width = 0.7)
+    
+    p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
   })
   
   output$topSalesProd <- renderPlot({
-    ggplot(topProdFil(), aes(x = Product.Name, y = totalSales))+
+    p <- ggplot(topProdFil(), aes(x = Product.Name, y = totalSales))+
       geom_col(aes(fill = Category), width = 0.7) + coord_flip()
+    
+    p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
   })
   
   #=========== Tab 2 related code end  ===================#
@@ -893,15 +970,21 @@ server <- function(input, output, session) {
   #=========== Delivery tab related code start============#
   
   output$deliveryRegion <- renderPlot({
-    ggplot(regionDelvShipFil(), aes(x = Region, y = uniqueOrderId, fill = shipDays))+
+    ggplot(regionDelvShipFil(), aes(x = Region, y = uniqueOrderId, fill = Ship.Mode))+
       #  geom_col(aes(fill = shipDays), width = 0.7)
       geom_bar(stat = "identity", position = 'dodge')
   })
   
-  output$deliveryMonth <- renderPlot({
-    ggplot(monthDelvShipFil(), aes(x = month, y = uniqueOrderId, fill = shipDays))+
-      #  geom_col(aes(fill = shipDays), width = 0.7)
-      geom_bar(stat = "identity", position = 'dodge')
+  output$deliveryMap <- renderHighchart({
+    highchart() %>%
+      hc_add_series_map(usgeojson,mapDelvShipFil(), name = "Total Delivery",
+                        value = "uniqueOrderId", joinBy = c("woename", "State"),
+                        dataLabels = list(enabled = TRUE,
+                                          format = '{point.properties.postalcode}')) %>%
+      hc_colorAxis(stops = colstops) %>%
+      hc_legend(valueDecimals = 0, valueSuffix = "%") %>%
+      hc_mapNavigation(enabled = TRUE) %>%
+      hc_add_theme(thm)
   })
   
   output$deliverySubCat <- renderPlot({
