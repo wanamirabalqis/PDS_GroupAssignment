@@ -10,7 +10,7 @@ library(forecast)
 library(treemap)
 library(shinydashboard)
 library(stringr)
-require(scales)
+library(scales)
 
 #============= For USA map usage start==========
 n <- 4
@@ -37,29 +37,19 @@ thm <-
 #============= Prepare data start===================
 
 ## Superstore Data
-url <- paste( "C:/Users/KANGHEA/OneDrive - Hilti/Study/WQD7001",
-              "/Assignment/Group Assignment", 
-              "/superStoreData.csv", sep = "")
-#url <- paste("C:/Users/MLee27/Desktop/Training/06-Jupyter_Practice/10_UMS/WQD7001_Principal_Data_Science/Project_Data/data_local/Generated",
-#             "/US Superstore data_v2.csv", sep = "")
 
-superStoreData <- read.csv(url)
+superStoreData <- read.csv("superStoreData.csv", header=TRUE)
 
-#str(superStoreData)
 
 ## US_Census_Merge_Clean_Data
-url <- paste("C:/Users/KANGHEA/OneDrive - Hilti/Study/WQD7001",
-"/Assignment/Group Assignment", 
-"/US_Census_Annual_Merge_Clean_v2.csv", sep = "")
+url <- paste("US_Census_Annual_Merge_Clean_v2.csv", sep = "")
 
 US_Census_Merge_clean <- read.csv(url)
 
 #str(US_Census_Merge_clean)
 
 ## Sales Trend Industry Overlook
-url <- paste("C:/Users/KANGHEA/OneDrive - Hilti/Study/WQD7001",
-              "/Assignment/Group Assignment", 
-              "/salesbcll.csv", sep = "")
+url <- paste("salesbcll.csv", sep = "")
 
 salesbcll <- read.csv(url)
 
@@ -129,7 +119,7 @@ frow2 <- fluidRow(
 frow3 <- fluidRow(
   
   box(
-    title = "Total Sales by Product"
+    title = "Total Sales by Region"
     ,status = "primary"
     ,solidHeader = TRUE 
     ,collapsible = TRUE 
@@ -137,7 +127,7 @@ frow3 <- fluidRow(
   )
   
   ,box(
-    title = "Sales by State"
+    title = "Total Sales by State"
     ,status = "primary"
     ,solidHeader = TRUE 
     ,collapsible = TRUE 
@@ -169,7 +159,7 @@ frow5 <- fluidRow(
 frow6 <- fluidRow(
   
   box(
-    title = "Top Sales by Category"
+    title = "Top Sales by Sub-Category"
     ,status = "primary"
     ,solidHeader = TRUE 
     ,collapsible = TRUE 
@@ -248,7 +238,7 @@ frow9 <- fluidRow(
 frow10 <- fluidRow(
   box(
     width=12,
-    title = "Delivery Trend by State"
+    title = "No of Delivery by State"
     ,status = "primary"
     ,solidHeader = TRUE 
     ,collapsible = TRUE 
@@ -260,7 +250,7 @@ frow10 <- fluidRow(
 frow11 <- fluidRow(
   
   box(
-    title = "Shipment Days by Region"
+    title = "Shipment Mode by Region"
     ,status = "primary"
     ,solidHeader = TRUE 
     ,collapsible = TRUE 
@@ -868,14 +858,14 @@ server <- function(input, output, session) {
   #=========== Tab 1 related code start ===================#
   output$trendTotalSales <- renderPlot({
     p <- ggplot(tolSalFiltered(), aes(x = month, y = totalSales)) + 
-      geom_line(aes(color = year,group=year))
+      geom_line(aes(color = year,group=year)) + labs(x = "Month", y="Total Sales")
     
     p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
   })
   
   output$totalSalesByPrd <- renderPlot({
     p <- ggplot(regCatSalFiltered(), aes(x = Region, y = totalSales))+
-      geom_col(aes(fill = Category), width = 0.7)
+      geom_col(aes(fill = Category), width = 0.7) + labs(x = "Region", y="Total Sales")
     
     p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
   })
@@ -896,23 +886,25 @@ server <- function(input, output, session) {
   #=========== Tab 2 related code start ===================#
   output$catSalesTrend <- renderPlot({
     p <- ggplot(catSalesTrendFil(), aes(x = month, y = totalSales)) + 
-      geom_line(aes(color = Category,group=Category)) 
+      geom_line(aes(color = Category,group=Category)) + labs(x = "Month", y="Total Sales")
     
     p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
   })
   
   output$topSalesCat <- renderPlot({
     p <- ggplot(topSubCatFil(), aes(x = Sub.Category, y = totalSales)) +
-      geom_col(aes(fill = Category), width = 0.7)
+      geom_col(aes(fill = Category), width = 0.7) + labs(x = "Sub-Category", y="Total Sales")
     
     p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
+
   })
   
   output$topSalesProd <- renderPlot({
     p <- ggplot(topProdFil(), aes(x = Product.Name, y = totalSales))+
-      geom_col(aes(fill = Category), width = 0.7) + coord_flip()
+      geom_col(aes(fill = Category), width = 0.7) + coord_flip() + labs(x = "Product", y="Total Sales")
     
     p + scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
+
   })
   
   #=========== Tab 2 related code end  ===================#
@@ -972,7 +964,9 @@ server <- function(input, output, session) {
   output$deliveryRegion <- renderPlot({
     ggplot(regionDelvShipFil(), aes(x = Region, y = uniqueOrderId, fill = Ship.Mode))+
       #  geom_col(aes(fill = shipDays), width = 0.7)
-      geom_bar(stat = "identity", position = 'dodge')
+      geom_bar(stat = "identity", position = 'dodge') + labs(x = "Region", 
+                                                             y="No. of Order",
+                                                             colour = "Shipment Mode")
   })
   
   output$deliveryMap <- renderHighchart({
@@ -990,7 +984,9 @@ server <- function(input, output, session) {
   output$deliverySubCat <- renderPlot({
     ggplot(subCatDelvShipFil(), aes(x = Ship.Mode, y = uniqueOrderId, fill = shipDays))+
       #geom_bar(stat = "identity", position = 'dodge')
-      geom_col(aes(fill = shipDays), width = 0.7)
+      geom_col(aes(fill = shipDays), width = 0.7) + labs(x = "Ship Mode", 
+                                                         y="No. of Order",
+                                                         colour = "Shipment Days")
   })
   
   #=========== Delivery tab realted code end==============#
