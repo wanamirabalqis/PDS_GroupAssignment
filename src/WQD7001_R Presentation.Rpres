@@ -3,34 +3,75 @@ US Superstore Dashboard Analysis
 ========================================================
 author: 
 date: 
-css:custom.css
 autosize: true
+transition: linear
+css: custom.css
 
-WQD7001 - Principle of Data Science <br>
+
+<h3>WQD7001 - Principle of Data Science </h3><br>
+<h3> Group H </h3><br>
 Team Members: <br>
 1) Wan Amira Balqis binti Wan Amir Abdul Hakim (S2003952) <br>
 2) Kang Hean Kuan (S2005669) <br>
 3) Nicholas Lee Kan (17201982) <br>
 4) Lee Ming Xiang (S2021030) <br>
 
+
 US Superstore Dashboard
 ========================================================
-- A data from Statista stated that the global e-commerce market had sales reaching $3.5 trillion and represented 14% of the total share of global retail sales by the end of 2019. 
+<h3> Introduction </h3>
+/put graph here
 
-<b>Problem Statement</b><br>
+The idea of the trends and insights that we could get from consumer behavior is particularly interesting, hence we chose the domain – E-Commerce. We believe that with proper usage of analytics on the consumer data, we can visualize and observe different kinds of consumer behaviors. 
+
+<h3>Project Questions</h3>
 - What are the trend of sales that we can observe for different categories in the past years? <br>
 - What are the trend of shippings that we can observe for different region in the past years? <br>
 - What are the past industry data which could provide an insight on the recent sales? <br>
 
 
-Test Screenshot
+Data Science Process
 ========================================================
+<h3>Ask an intriguing question:</h3>
+Do superstore owners in the US understand their sales behavior?
 
-![Test Image](anaconda.png)
+<h3>Obtain data:</h3>
+The data set used in this assignment is extracted from <a href="https://www.kaggle.com/juhi1994/superstore">Kaggle</a>. This dataset contains online order sales from 2014-2017 for Furniture, Office Supplies and Technology. Raw data consisted of 9,994 rows and 21 variables. /Ming to add dataset
 
-Slide With Plot
+<h3>Exploring the data:</h3>
+/Nicholas & Kang
+
+<h3>Cleaning the data:</h3>
+/Nicholas & Kang
+<h3>Model the data:</h3>
+/Nicholas & Kang
+
+<h3>Data visualization:</h3>
+Generated a Shiny app with 4 tabs that show: Sales Overview, Product Dashboard, Delivery Dashboard, and Industry Overlook which is posted in shinyapp.io.
+
+US Superstore Dashboard App
 ========================================================
+<insert image here> /Ming to include icon
 
-```{r, echo=FALSE}
-plot(cars)
-```
+The US Superstore Dashboard App provides an insight to business users on their clientele behavior, and a widespread view on the industry. The app consists of 4 tabs:
+
+<h5>Sales Overview Tab</h5>
+This tab provides a general insight of the sales in the US Superstore. In this tab there are three boxes which show the total sales per year, product and by state. Each box can be filtered according to Category,Year and Region.
+
+<h5>Product Dashboard Tab</h5>
+This tab provides a more detailed insight of the sales for each product. We can see the category sales trend, top sales per sub-category and top sales by Product. Each box can be filtered according to Category, Year and Region.
+
+<h5>Delivery Dashboard Tab</h5>
+This tab provides an insight on the delivery behavior to the Superstore's customers. The number of delivery per state, shipment mode by region and shipment days by shipping mode. These can be filtered according to Category, Year and Region.
+
+<h5>Industry Overlook Tab</h5>
+This tab provides a full view of the industry trends from 2008 to 2018. Business will have the transparency of the sales trend per month for each type of product, annual OPEX & gross margin, annual account receivable turnover ratio, annual gross margin percentage and end of year inventories from 2008 to 2014. These can all be filtered by Category.
+
+
+========================================================
+<h1>Challenges Faced:</h1>
+- Most of us are beginners with R coding, took a lot of preseverance and intensive studying to complete the development of the app
+- Difficulty in doing group discussions due to the pandemic. Discussions on Microsoft Teams made it easier for us to connect and work together to complete the project.
+
+<h1>Shiny App Details</h1>
+/put data links, shiny link and github link
