@@ -406,7 +406,7 @@ sidebar <- dashboardSidebar(disable = TRUE)
 body <- dashboardBody(report)
 
 #completing the ui part with dashboardPage
-ui <- dashboardPage(title = 'This is my Page title', header, sidebar, body, skin='red')
+ui <- dashboardPage(title = 'US Super Store', header, sidebar, body, skin='red')
 #============== Dashboard code end ===============
 
 server <- function(input, output, session) {
