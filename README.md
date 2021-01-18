@@ -22,11 +22,11 @@ Website for the Shiny App: [US Store Dashboard](https://s2005669.shinyapps.io/Su
 
 ## File description
 ### /src/
-app.R - code for the US Store Dashboard
-WQD7001_R_Presentation.Rpres - Presentation slide for US Store Dashboard (WQD7001 group assignment)
-custom.css - CSS for presentation slide
+1. app.R - code for the US Store Dashboard
+1. WQD7001_R_Presentation.Rpres - Presentation slide for US Store Dashboard (WQD7001 group assignment)
+1. custom.css - CSS for presentation slide
 
 ### /data_local
-superStoreData.csv - data for the US Store Dashboard
-US_Census_Annual_Meger_Clean_c2.csv - US census data
-salessbcll - Sales trend industry outlook
+1. superStoreData.csv - data for the US Store Dashboard
+1. US_Census_Annual_Meger_Clean_c2.csv - US census data
+1. salessbcll - Sales trend industry outlook
