@@ -26,7 +26,7 @@ Website for the Shiny App: [US Store Dashboard](https://s2005669.shinyapps.io/Su
 1. WQD7001_R_Presentation.Rpres - Presentation slide for US Store Dashboard (WQD7001 group assignment)
 1. custom.css - CSS for presentation slide
 
-### /data_local
+### /data_local/
 1. superStoreData.csv - Data for the US Store Dashboard
 1. US_Census_Annual_Meger_Clean_c2.csv - US census data
 1. salessbcll - Sales trend industry outlook
