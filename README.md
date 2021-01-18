@@ -17,3 +17,16 @@ This tab provides a full view of the industry trends from 2008 to 2018. Business
 ## Obtain data
 The data set used in this assignment is extracted from [Kaggle](https://www.kaggle.com/juhi1994/superstore). This dataset contains online order sales from 2014-2017 for Furniture, Office Supplies and Technology.
 
+## Shiny App
+Website for the Shiny App: [US Store Dashboard](https://s2005669.shinyapps.io/SuperStoreDashBoard/) 
+
+## File description
+### /src/
+app.R - code for the US Store Dashboard
+WQD7001_R_Presentation.Rpres - Presentation slide for US Store Dashboard (WQD7001 group assignment)
+custom.css - CSS for presentation slide
+
+### /data_local
+superStoreData.csv - data for the US Store Dashboard
+US_Census_Annual_Meger_Clean_c2.csv - US census data
+salessbcll - Sales trend industry outlook
