@@ -14,3 +14,6 @@ This tab provides an insight on the delivery behavior to the Superstore's custom
 ## Industry Overlook Tab
 This tab provides a full view of the industry trends from 2008 to 2018. Business will have the transparency of the sales trend per month for each type of product, annual OPEX & gross margin, annual account receivable turnover ratio, annual gross margin percentage and end of year inventories from 2008 to 2014. These can all be filtered by Category.
 
+## Obtain data
+The data set used in this assignment is extracted from [Kaggle](https://www.kaggle.com/juhi1994/superstore). This dataset contains online order sales from 2014-2017 for Furniture, Office Supplies and Technology.
+
