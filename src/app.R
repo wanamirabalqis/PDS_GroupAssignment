@@ -270,6 +270,53 @@ frow11 <- fluidRow(
 #============= UI code end =====================
 
 #=============== Overview UI start===============
+
+guideline <- fluidPage(
+  mainPanel(
+    tags$h1("How to Use This App?"),
+    tags$h4('Overview Tab'),
+    tags$ol(
+     "This tab provides a general insight of the sales in the US Superstore."
+    ),
+    tags$ol(
+      "In this tab there are three boxes which show the total sales per year, 
+      product and by state. Each box can be filtered according to Category, Year 
+      and Region."
+    ),
+
+    tags$h4('Product Dashboard Tab'),
+    tags$ol( "This tab provides a more detailed insight of the sales for each 
+             product."), 
+    tags$ol("We can see the category sales trend, top sales per sub-category and
+            top sales by Product.
+            Each box can be filtered according to Category, Year and Region.
+            Select desired filter from the sidepanel located on left side of 
+            screen."), 
+
+    tags$h4('Delivery Dashboard Tab'),
+    tags$ol("This tab provides an insight on the delivery behavior to the 
+            Superstore's customers. "), 
+    tags$ol("The number of delivery per state, shipment mode by region and 
+            shipment days by shipping mode.
+            These can be filtered according to Category, Year and Region.
+            Select desired filter from the sidepanel located on left side 
+            of screen."),
+  
+    tags$h4('Industry Overlook Tab'),
+    tags$ol("This tab provides a full view of the industry trends from 2008 
+            to 2018"), 
+    tags$ol("Business will have the transparency of the sales trend per month 
+          for each type of product, annual OPEX & gross margin,
+          annual account receivable turnover ratio, annual gross margin 
+          percentage and end of year inventories from 2008 to 2014.
+          These can all be filtered by Category.Select desired filter from the 
+            sidepanel located on left side of screen."), 
+    
+    tags$h4('Note: You may need to wait a few seconds for the graph to show up.'),
+    tags$h4(a(href="https://github.com/wanamirabalqis/PDS_GroupAssignment", "Github link")),
+  ),
+)
+
 overview <- fluidPage(
   sidebarLayout(
     sidebarPanel(
@@ -387,11 +434,12 @@ report <- fluidPage(
   tabBox(
     # The id lets us use input$tabset1 on the server to find the current tab
     id = "tabset1", width=12,
+    tabPanel("Guideline", guideline),
     tabPanel("Overview", overview),
     tabPanel("Product Dashboard", Product),
     tabPanel("Delivery Dashboard", Delivery),
-    tabPanel("Industry Overlook", History),
-    tabPanel(a("Github", href="https://github.com/wanamirabalqis/PDS_GroupAssignment", target="_blank"))
+    tabPanel("Industry Overlook", History)
+    #tabPanel(a("Github", href="https://github.com/wanamirabalqis/PDS_GroupAssignment", target="_blank"))
 )
 )
 #============= UI code end ===================
