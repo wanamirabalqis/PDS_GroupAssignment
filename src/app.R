@@ -631,10 +631,9 @@ server <- function(input, output, session) {
           group_by(Product.Name,Category) %>%                   
           summarise_at(vars(totalSales),              
                        list(totalSales = sum))
-        arrange(topProdGrp,totalSales)
-        topProdGrp = tail(topProdGrp)
         
-        arrange(topProdGrp,totalSales)
+        topProdGrp <- topProdGrp %>% 
+          arrange(totalSales)
         topProdGrp = tail(topProdGrp)
         
         return(topProdGrp)
@@ -665,7 +664,8 @@ server <- function(input, output, session) {
         summarise_at(vars(totalSales),              
                      list(totalSales = sum))
       
-      arrange(topProdGrp,totalSales)
+      topProdGrp <- topProdGrp %>% 
+        arrange(totalSales)
       topProdGrp = tail(topProdGrp)
       
       return(topProdGrp)
